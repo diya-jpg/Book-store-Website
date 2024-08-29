@@ -4,10 +4,18 @@ import { useEffect, useState } from "react";
 import Loader from "../Loader/Loading";
 import { useParams } from "react-router-dom";
 import { GrLanguage } from "react-icons/gr";
+import { FaHeart } from "react-icons/fa";
+import { FaShoppingCart } from "react-icons/fa";
+import {useSelector} from "react-redux";
+import { FaEdit } from "react-icons/fa";
+import { MdDelete } from "react-icons/md";
 const ViewBookDetails= () => {
   const {id}=useParams();
   console.log(id);
   const[Data,setData]=useState();
+  const isLoggedIn=useSelector((state)=>state.auth.isLoggedIn);
+  const role=useSelector((state)=>state.auth.role);
+  
   useEffect(()=>{
     const fetch=async()=>{
       const response=await axios.get(`http://localhost:1000/api/v1/get-book-by-id/${id}`);
@@ -19,9 +27,43 @@ const ViewBookDetails= () => {
   return (
    <>
    {Data && (
-     <div className=" px-4 md:px-12 py-8 bg-zinc-900 flex  flex-col md:flex-row  gap-8">
-     <div className="bg-zinc-800 rounded p-4  h-[60vh] lg:h-[88vh]  w-full lg:w-3/6 flex items-center justify-center">
-     <img src={Data.url} alt="/" className="h-[50vh] lg:h-[70vh] rounded"/>
+     <div className=" px-4 md:px-12 py-8 bg-zinc-900 flex  flex-col lg:flex-row md:flex-row  gap-8">
+     <div className="  w-full lg:w-3/6 ">
+     <div className="flex flex-col lg:flex-row justify-around bg-zinc-800  p-12 rounded ">
+     <img src={Data.url} alt="/" className="h-[50vh] md:h-[60vh] lg:h-[70vh] rounded"/>
+     {isLoggedIn===true && role ==="user" &&(
+      <div className="flex flex-row lg:flex-col items-center justify-between lg:justify-start ml-5 mt-4 lg:mt-0">
+      <button className="bg-white  rounded lg:rounded-full text-2xl p-2 text-red-500 flex items-center justify-center ">
+      <FaHeart /><span className="ms-4 block lg:hidden">Favourites</span>
+      </button>
+      <button className="text-white rounded lg:rounded-full text-2xl p-2  mt-0 lg:mt-8 bg-blue-500 flex items-center justify-center">
+      <FaShoppingCart /><span className="ms-4 block lg:hidden">Add To Cart</span>
+
+      </button>
+     </div>
+     )}
+      {isLoggedIn===true && role ==="admin" &&(
+      <div className="flex flex-row lg:flex-col items-center justify-between lg:justify-start ml-5 mt-4 lg:mt-0">
+      <button className="bg-white  rounded lg:rounded-full text-2xl p-2 text-red-500 flex items-center justify-center ">
+      {isLoggedIn===true && role ==="user" &&(
+      <div className="flex flex-row lg:flex-col items-center justify-between lg:justify-start ml-5 mt-4 lg:mt-0">
+      <button className="bg-white  rounded lg:rounded-full text-2xl p-2 text-red-500 flex items-center justify-center ">
+      <FaEdit /><span className="ms-4 block lg:hidden">Edit</span>
+      </button>
+      <button className="text-red-500 rounded lg:rounded-full text-2xl p-2  mt-0 lg:mt-8 bg-white-500 flex items-center justify-center">
+      <MdDelete /><span className="ms-4 block lg:hidden">Delete</span>
+
+      </button>
+     </div>
+     )}<span className="ms-4 block lg:hidden">Favourites</span>
+      </button>
+      <button className="text-white rounded lg:rounded-full text-2xl p-2  mt-0 lg:mt-8 bg-blue-500 flex items-center justify-center">
+      <FaShoppingCart /><span className="ms-4 block lg:hidden">Add To Cart</span>
+
+      </button>
+     </div>
+     )}
+     </div>
      </div>
      <div className="p-4 w-full  lg:w-3/6">
      <h1 className="text-4xl text-zinc-300 font-semibold">{Data.title}</h1>

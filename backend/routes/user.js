@@ -74,7 +74,7 @@ router.get("/get-user-information", authenticateToken,async(req,res)=>{
             catch{
                 res.status(500).json({ message: "Internal server error" });
             }
-        })
+        });
 
         router.put("/update-address", authenticateToken,async(req,res)=>{
             try{
