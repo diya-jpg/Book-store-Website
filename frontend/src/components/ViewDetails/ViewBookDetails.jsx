@@ -9,6 +9,7 @@ import { FaShoppingCart } from "react-icons/fa";
 import {useSelector} from "react-redux";
 import { FaEdit } from "react-icons/fa";
 import { MdDelete } from "react-icons/md";
+
 const ViewBookDetails= () => {
   const {id}=useParams();
   console.log(id);
@@ -24,6 +25,25 @@ const ViewBookDetails= () => {
     };
     fetch();
   },[]);
+  const Headers={
+    id:localStorage.getItem("id"),
+    Authorization: `Bearer ${localStorage.getItem("token")}`,
+    bookid:id,
+  }
+  const HandleFavourite=async()=>{
+    
+
+    const response=await axios.put("http://localhost:1000/api/v1/add-book-to-favourite",{ bookid: id, id: localStorage.getItem("id")},{headers:Headers});
+    alert(response.data.message);
+    
+  };
+  const HandleCart=async()=>{
+    
+
+    const response=await axios.put("http://localhost:1000/api/v1/add-book-to-cart",{ bookid: id, id: localStorage.getItem("id")},{headers:Headers});
+    alert(response.data.message);
+    
+  };
   return (
    <>
    {Data && (
@@ -32,25 +52,23 @@ const ViewBookDetails= () => {
      <div className="flex flex-col lg:flex-row justify-around bg-zinc-800  p-12 rounded ">
      <img src={Data.url} alt="/" className="h-[50vh] md:h-[60vh] lg:h-[70vh] rounded"/>
      {isLoggedIn===true && role ==="user" &&(
-      <div className="flex flex-row lg:flex-col items-center justify-between lg:justify-start ml-5 mt-4 lg:mt-0">
-      <button className="bg-white  rounded lg:rounded-full text-2xl p-2 text-red-500 flex items-center justify-center ">
+      <div className="flex flex-col md:flex-row lg:flex-col items-center justify-between lg:justify-start ml-5 mt-4 lg:mt-0">
+      <button className="bg-white  rounded lg:rounded-full text-2xl p-2 text-red-500 flex items-center justify-center" onClick={HandleFavourite}>
       <FaHeart /><span className="ms-4 block lg:hidden">Favourites</span>
       </button>
-      <button className="text-white rounded lg:rounded-full text-2xl p-2  mt-0 lg:mt-8 bg-blue-500 flex items-center justify-center">
-      <FaShoppingCart /><span className="ms-4 block lg:hidden">Add To Cart</span>
+      <button className="text-white rounded mt-8 md:mt-0 lg:rounded-full text-2xl p-2   lg:mt-8 bg-blue-500 flex items-center justify-center"onClick={HandleCart}>    <FaShoppingCart /><span className="ms-4 block lg:hidden"  >Add To Cart</span>
 
       </button>
      </div>
      )}
       {isLoggedIn===true && role ==="admin" &&(
-      <div className="flex flex-row lg:flex-col items-center justify-between lg:justify-start ml-5 mt-4 lg:mt-0">
-      <button className="bg-white  rounded lg:rounded-full text-2xl p-2 text-red-500 flex items-center justify-center ">
-      {isLoggedIn===true && role ==="user" &&(
+      <div className="flex flex-col md:flex-row lg:flex-col items-center justify-between lg:justify-start ml-5 mt-4 lg:mt-0">
+      <button className="bg-white  rounded lg:rounded-full text-2xl p-2 text-red-500 flex items-center justify-center "> {isLoggedIn===true && role ==="user" &&(
       <div className="flex flex-row lg:flex-col items-center justify-between lg:justify-start ml-5 mt-4 lg:mt-0">
       <button className="bg-white  rounded lg:rounded-full text-2xl p-2 text-red-500 flex items-center justify-center ">
       <FaEdit /><span className="ms-4 block lg:hidden">Edit</span>
       </button>
-      <button className="text-red-500 rounded lg:rounded-full text-2xl p-2  mt-0 lg:mt-8 bg-white-500 flex items-center justify-center">
+      <button className="text-red-500 rounded mt-8 md:mt-0 lg:rounded-full text-2xl p-2 lg:mt-8 bg-white-500 flex items-center justify-center">
       <MdDelete /><span className="ms-4 block lg:hidden">Delete</span>
 
       </button>

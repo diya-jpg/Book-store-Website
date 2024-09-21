@@ -11,6 +11,7 @@ const {authenticateToken}=require("./userAuth");
 router.put("/add-book-to-favourite",authenticateToken,async(req,res)=>{
     try{
        const {bookid,id}=req.body;
+       console.log("Book Id:",bookid);
       
 const userData=await User.findById(id);
 
@@ -67,7 +68,7 @@ const BookFavourite=userData.favourites;
  
   return res.status(200).json({
     status:"Success",
-    data:BookFavourite
+    data:BookFavourite       
   });
 }
 catch(error){
